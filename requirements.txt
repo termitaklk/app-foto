@@ -1,0 +1,9 @@
+cx_Freeze==7.2.7
+cx_Freeze==7.2.7
+google_api_python_client==2.149.0
+google_auth_oauthlib==1.2.1
+pandas==2.2.3
+Pillow==11.0.0
+protobuf==5.29.2
+python-dotenv==1.0.1
+ttkbootstrap==1.10.1

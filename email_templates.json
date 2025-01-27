@@ -1,0 +1,26 @@
+{
+    "Inglés": {
+        "subject": "PHOTOS SCAPE PARK APP",
+        "body": "Dear Sr/Sra {last_name}, I hope you are well.\n\nIt is a pleasure to greet you on behalf of the entire Scape Park team.\n\nWe are contacting you to remind you that photographs of your visit will be available in our system for 6 weeks, counting from the day you visited us, {visit_date}.\n\nIf you are interested in preserving memories of your exciting and adventurous day, we offer a photography package that includes all images.\n\nKind regards."
+    },
+    "Español": {
+        "subject": "PHOTOS SCAPE PARK APP",
+        "body": "Estimado Sr/Sra {last_name}, espero que se encuentre bien.\n\nEs un placer saludarlo en nombre de todo el equipo de Scape Park.\n\nNos comunicamos con usted para recordarle que las fotografías de su visita estarán disponibles en nuestro sistema durante 6 semanas, contadas a partir del día en que nos visitó, {visit_date}.\n\nSi está interesado en preservar recuerdos de su día emocionante y aventurero, ofrecemos un paquete de fotografía que incluye todas las imágenes.\n\nQuedo a tu disposición para cualquier duda o información adicional que necesite.\n\nSaludos cordiales."
+    },
+    "Portugués": {
+        "subject": "PHOTOS SCAPE PARK APP",
+        "body": "Estimado Sr/Sra {last_name}, espero que esteja bem.\n\nÉ um prazer cumprimentá-lo em nome de toda a equipe do Scape Park.\n\nEstamos entrando em contato para lembrá-lo de que as fotos de sua visita estarão disponíveis em nosso sistema por 6 semanas, a partir do dia em que nos visitou, {visit_date}.\n\nSe estiver interessado em guardar recordações do seu dia emocionante e aventureiro, oferecemos um pacote de fotos que inclui todas as imagens.\n\nEstou à sua disposição para qualquer dúvida ou informação adicional que necessitar.\n\nAtenciosamente."
+    },
+    "Francés": {
+        "subject": "PHOTOS SCAPE PARK APP",
+        "body": "Cher(e) M./Mme {last_name}, j'espère que vous allez bien.\n\nC'est un plaisir de vous saluer au nom de toute l'équipe de Scape Park.\n\nNous vous contactons pour vous rappeler que les photos de votre visite seront disponibles dans notre système pendant 6 semaines, à compter du jour où vous nous avez rendu visite, {visit_date}.\n\nSi vous êtes intéressé(e) à conserver des souvenirs de votre journée aventureuse et passionnante, nous proposons un forfait photo incluant toutes les images.\n\nJe reste à votre disposition pour toute question ou information complémentaire dont vous pourriez avoir besoin. \n\nCordialement."
+    },
+    "Ruso": {
+        "subject": "PHOTOS SCAPE PARK APP",
+        "body": "Уважаемый(ая) г-н/г-жа {last_name}, надеюсь, у вас всё хорошо.\n\nРады приветствовать вас от имени всей команды Scape Park.\n\nМы обращаемся к вам, чтобы напомнить, что фотографии вашего визита будут доступны в нашей системе в течение 6 недель, начиная с дня вашего визита, {visit_date}.\n\nЕсли вы хотите сохранить воспоминания о своем захватывающем и приключенческом дне, мы предлагаем пакет фотографий, включающий все изображения.\n\nЯ к вашим услугам для любых вопросов или дополнительной информации.\n\nС уважением."
+    },
+    "Comercial": {
+        "subject": "PHOTOS SCAPE PARK APP",
+        "body": "Dear Sr/Sra {last_name}, I hope you are well.\n\nIt is a pleasure to greet you on behalf of the entire Scape Park team.\n\nWe are contacting you to remind you that photographs of your visit will be available in our system for 6 weeks, counting from the day you visited.\n\nIf you are interested in preserving memories of your exciting and adventurous day, we offer a photography package that includes all images.\n\nKind regards."
+    }
+}

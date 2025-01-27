@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Nocturno</title>
+    <style>
+        /* Estilos generales */
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 400px; 
+            margin: auto; 
+            padding: 20px; 
+            background-color: #f4f4f9; 
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+            color: #161616;
+        }
+        .field-row {
+            display: flex;
+            align-items: center; /* Alinea elementos verticalmente */
+            justify-content: center; /* Centra horizontalmente */
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .field-row label {
+            font-weight: bold;
+            color: #168ad8; /* Cambia el color */
+            font-size: 1.2em; /* Aumenta el tamaño del texto */
+            padding: 5px; /* Espaciado interno */
+            margin: 0; /* Elimina márgenes extras */
+        }
+        .field-row input {
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #161616;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 5px;
+            width: 80px; /* Ajusta el ancho del input */
+            background-color: #f4f4f9;
+            margin: 0; /* Elimina el margen extra */
+        }
+        .checkbox-container {
+            display: none;
+            justify-content: center; /* Centra horizontalmente */
+            align-items: center; /* Alinea verticalmente */
+            gap: 40px; /* Espacio entre las dos opciones */
+            margin-bottom: 15px;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center; /* Alinea label y checkbox verticalmente */
+            gap: 10px; /* Espaciado entre label y checkbox */
+            white-space: nowrap; /* Evita que el texto ocupe múltiples líneas */
+        }
+        .checkbox-item label {
+            font-size: 1em;
+            font-weight: normal;
+            color: #161616;
+            margin: 0;
+        }
+        input[type="checkbox"] {
+            margin: 0; /* Asegura que el checkbox no tenga margen adicional */
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+        input:focus, select:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 4px rgba(76, 175, 80, 0.2);
+        }
+        
+        /* Estilos del botón */
+        #registerButton, #submitButton {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        button:disabled {
+    background-color: red !important;
+    color: white;
+    opacity: 1; /* Asegura que el color se vea completo */
+    cursor: not-allowed;
+}
+
+        #registerButton:hover, #submitButton:hover {
+            background-color: #45a049;
+        }
+
+        /* Mensaje de resultado */
+        #resultMessage {
+            text-align: center;
+            font-size: 1em;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        /* Ocultar contenedores de campos dinámicos al inicio */
+        #atributo-container, #idioma-container { display: none; } 
+
+        /* Estilo de campos obligatorios sin completar */
+        .error-border {
+            border-color: red !important;
+            box-shadow: 0 0 4px rgba(255, 0, 0, 0.3) !important;
+        }
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Registro de la Noche</h2>
+    <div class="field-row">
+        <label for="dayField">Periodo de Trabajo</label>
+        <input id="dayField" type="text" value="NOCHE" readonly>
+    </div>
+    <form id="registrationForm">
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" required>
+
+        <label for="pax">PAX:</label>
+        <input type="number" id="pax" min="1" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+
+        <div id="idioma-container">
+            <label for="idioma">Language:</label>
+            <select id="idioma">
+                <option value="">Seleccione un idioma (opcional)</option>
+            </select>
+        </div>
+
+        <div class="checkbox-container" id="checkboxContainer">
+            <div class="checkbox-item">
+                <label for="sunshineCruise">Sunshine Cruise</label>
+                <input type="checkbox" id="sunshineCruise" value="Sunshine Cruise">
+            </div>
+            <div class="checkbox-item">
+                <label for="cortesia">Cortesía</label>
+                <input type="checkbox" id="cortesia" value="Cortesía">
+            </div>
+        </div>
+
+        <div id="atributo-container">
+            <label for="atributo">Atributo:</label>
+            <select id="atributo" required>
+                <option value="">Seleccione un atributo</option>
+            </select>
+        </div>
+
+        <button type="button" id="registerButton" onclick="showAtributo()">Register</button>
+        <button type="button" id="submitButton" style="display: none;" onclick="submitForm()">Enviar</button>
+    </form>
+    <p id="resultMessage"></p>
+    <p class="error-message" id="errorMessage"></p>
+
+    <script>
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwwGe-JTkfo7kBBPMFX0BdD90aJmo-pxftvBpxKb_Oh-oLZAWAAYvuxvRjnXjfdC7oI-Q/exec";
+
+        async function loadOptions() {
+            try {
+                document.getElementById("resultMessage").textContent = "Cargando opciones...";
+                const response = await fetch(GOOGLE_SCRIPT_URL);
+                const data = await response.json();
+                
+                if (data.atributos) {
+                    const atributoSelect = document.getElementById("atributo");
+                    data.atributos.forEach(attr => {
+                        const option = document.createElement("option");
+                        option.value = attr;
+                        option.textContent = attr;
+                        atributoSelect.appendChild(option);
+                    });
+                }
+
+                if (data.idiomas) {
+                    const idiomaSelect = document.getElementById("idioma");
+                    idiomaSelect.innerHTML = ""; // Limpiar opciones anteriores
+                    data.idiomas.forEach((lang, index) => {
+                        const option = document.createElement("option");
+                        option.value = lang;
+                        option.textContent = lang;
+                        idiomaSelect.appendChild(option);
+                    });
+
+                    // Seleccionar explícitamente el primer ítem después de cargar
+                    if (idiomaSelect.options.length > 0) {
+                        idiomaSelect.value = idiomaSelect.options[0].value;
+                    }
+                    document.getElementById("idioma-container").style.display = "block";
+                }
+                
+                document.getElementById("resultMessage").textContent = ""; // Limpiar mensaje de carga
+            } catch (error) {
+                document.getElementById("resultMessage").textContent = "Error al cargar opciones.";
+                console.error("Error al cargar los datos:", error);
+            }
+        }
+
+        function showAtributo() {
+            document.getElementById("checkboxContainer").style.display = "flex";
+            document.getElementById("atributo-container").style.display = "block"; 
+            document.getElementById("submitButton").style.display = "block";
+            document.getElementById("registerButton").style.display = "none";
+        }
+
+        function validateForm() {
+            let isValid = true;
+            const errorMessage = document.getElementById("errorMessage");
+            errorMessage.textContent = ""; // Limpiar mensaje de error
+
+            const requiredFields = ["lastName", "pax", "email", "atributo"];
+            requiredFields.forEach(id => {
+                const field = document.getElementById(id);
+                if (!field.value.trim()) {
+                    field.classList.add("error-border");
+                    isValid = false;
+                } else {
+                    field.classList.remove("error-border");
+                }
+            });
+
+            if (!isValid) {
+                errorMessage.textContent = "Por favor, complete todos los campos obligatorios.";
+            }
+            return isValid;
+        }
+
+        async function fetchLastId() {
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL + '?action=getLastId'); 
+                const data = await response.json();
+
+                if (data.lastId) {
+                    const lastIdNumber = parseInt(data.lastId.replace('F', ''));
+                    return `F${lastIdNumber + 1}`;
+                }
+                return "F1";
+            } catch (error) {
+                console.error("Error al obtener el último ID:", error);
+                return "F1"; 
+            }
+        }
+
+        async function submitForm() {
+            if (!validateForm()) return;
+
+            const lastName = document.getElementById("lastName").value;
+            const pax = document.getElementById("pax").value;
+            const email = document.getElementById("email").value;
+            const atributo = document.getElementById("atributo").value;
+            const idioma = document.getElementById("idioma").value;
+            const periodo = document.getElementById("dayField").value; // Obtener el valor del campo PERIODO
+            const sunshineCruise = document.getElementById("sunshineCruise").checked ? "SI" : "NO";
+            const cortesia = document.getElementById("cortesia").checked ? "SI" : "NO";
+
+            document.getElementById("resultMessage").textContent = "Enviando datos...";
+            document.getElementById("submitButton").disabled = true;
+
+            const nextId = await fetchLastId(); // Obtener el siguiente ID en secuencia
+
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        id: nextId, 
+                        last_name: lastName,
+                        pax: pax,
+                        email: email,
+                        atributo: atributo,
+                        idioma: idioma,
+                        periodo: periodo, // Enviar el valor de PERIODO
+                        sunshine_cruise: sunshineCruise,
+                        cortesia: cortesia
+                    }),
+                    mode: "no-cors"
+                });
+                document.getElementById("resultMessage").textContent = "Datos enviados con éxito.";
+            } catch (error) {
+                document.getElementById("resultMessage").textContent = "Error al enviar los datos.";
+                console.error("Error:", error);
+            }
+
+            document.getElementById("submitButton").disabled = false;
+            resetForm();
+        }
+
+        function resetForm() {
+            // Reiniciar el formulario
+            document.getElementById("registrationForm").reset();
+
+            // Asegurarse de que el idioma se restablezca al primer ítem después del reset
+            const idiomaSelect = document.getElementById("idioma");
+            if (idiomaSelect.options.length > 0) {
+                idiomaSelect.value = idiomaSelect.options[0].value; // Seleccionar el primer elemento manualmente
+            }
+            
+            document.getElementById("registrationForm").reset();
+            document.getElementById("checkboxContainer").style.display = "none";
+            document.getElementById("atributo-container").style.display = "none";
+            document.getElementById("submitButton").style.display = "none";
+            document.getElementById("registerButton").style.display = "block";
+            document.getElementById("errorMessage").textContent = "";
+            document.querySelectorAll(".error-border").forEach(el => el.classList.remove("error-border"));
+        }
+
+        loadOptions();
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
