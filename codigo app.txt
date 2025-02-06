@@ -1,0 +1,105 @@
+const SPREADSHEET_ID = "1jk7GelDht6gWuS6fO6R0hHAFI4h-Hau5FHkHDtByYB8";  // ID de tu Google Sheets
+
+function doPost(e) {
+    try {
+      const sheetName = new Date()
+          .toLocaleDateString("es-ES", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit"
+          })
+          .replace(/\//g, "-");
+          
+        const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+        let sheet = spreadsheet.getSheetByName(sheetName);
+
+        // Crear la hoja con estructura inicial si no existe
+        if (!sheet) {
+            sheet = spreadsheet.insertSheet(sheetName);
+            sheet.appendRow(["ID", "APELLIDO", "PAX", "CORREO", "ATRIBUTO", "VENDIDO", "REQUISITO", "IDIOMA", "ENVIADO", "PERIODO", "SUNSHINE CRUISE", "CORTESÍA"]);
+
+        }
+
+        const data = JSON.parse(e.postData.contents);
+        const lastRow = sheet.getLastRow();
+        const nextId = "F" + (lastRow + 1);  // Generar un ID único para cada registro
+
+        // Extraer datos de cliente
+        const lastName = data.last_name;
+        const pax = data.pax;
+        const email = data.email;
+        const atributo = data.atributo;
+        const idioma = data.idioma;
+        const periodo = data.periodo; // Tomar el valor de periodo enviado desde el frontend
+        const sunshineCruise = data.sunshine_cruise === "SI" ? "SI" : "NO"; // Validar y asignar valores
+        const cortesia = data.cortesia === "SI" ? "SI" : "NO"; // Validar y asignar valores
+
+
+        // Añadir los datos del cliente en la hoja de cálculo
+        sheet.appendRow([nextId, lastName, pax, email, atributo, "", "", idioma, "", periodo, sunshineCruise, cortesia]);
+
+        const response = {
+            status: "success",
+            id: nextId
+        };
+        return ContentService.createTextOutput(JSON.stringify(response))
+                             .setMimeType(ContentService.MimeType.JSON);
+    } catch (error) {
+        const errorResponse = {
+            status: "error",
+            message: error.message
+        };
+        return ContentService.createTextOutput(JSON.stringify(errorResponse))
+                             .setMimeType(ContentService.MimeType.JSON);
+    }
+}
+
+function doGet(e) {
+    const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const configSheet = spreadsheet.getSheetByName("configuracion");
+
+    if (!configSheet) {
+        return ContentService.createTextOutput(JSON.stringify({ error: "Hoja 'configuracion' no encontrada." }))
+                             .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // Obtener los atributos y los idiomas de la hoja de configuración
+    const atributos = configSheet.getRange("C2:C" + configSheet.getLastRow()).getValues().flat().filter(value => value);
+    const idiomas = configSheet.getRange("D2:D" + configSheet.getLastRow()).getValues().flat().filter(value => value);
+
+    return ContentService.createTextOutput(JSON.stringify({ atributos, idiomas }))
+                         .setMimeType(ContentService.MimeType.JSON);
+
+                         
+}
+
+// Función adicional para crear una nueva hoja de trabajo con estructura predefinida
+function createSheet(sheetName) {
+    const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const newSheet = spreadsheet.insertSheet(sheetName);
+    const headers = [['ID', 'LAST NAME', 'PAX', 'EMAIL', 'ATRIBUTO', 'VENDIDO', 'REQUISITO', 'IDIOMA', 'ENVIADO', 'SUNSHINE CRUISE', 'CORTESÍA']];
+    newSheet.getRange("A1:L1").setValues(headers);
+    return ContentService.createTextOutput("Hoja creada con éxito.");
+}
+
+// Función para actualizar celdas en una hoja existente
+function updateSheet(sheetName, range, values) {
+    const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sheet = spreadsheet.getSheetByName(sheetName);
+    if (!sheet) {
+        return ContentService.createTextOutput(JSON.stringify({ error: `Hoja '${sheetName}' no encontrada.` }))
+                             .setMimeType(ContentService.MimeType.JSON);
+    }
+    const data = JSON.parse(values);
+    sheet.getRange(range).setValues(data);
+    return ContentService.createTextOutput("Actualización completada.");
+}
+
+// Función para obtener todos los nombres de las hojas
+function getSheetNames() {
+    const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sheets = spreadsheet.getSheets();
+    const sheetNames = sheets.map(sheet => sheet.getName());
+    return ContentService.createTextOutput(JSON.stringify(sheetNames))
+                         .setMimeType(ContentService.MimeType.JSON);
+}
